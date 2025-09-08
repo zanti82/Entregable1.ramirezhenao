@@ -59,11 +59,16 @@ function ingresar(){ //aca se loggea un usuario registrado
     
     let mailR=prompt("ingrese su email: ");
     let passwordR=prompt("ingrese su password: ");
-
+   
     usuarios.forEach(usuario => {
+
+        
+            
+               
         if(mailR===usuario.mail && passwordR==usuario.pass){
 
             alert("LOGGIN EXITOSO")
+            loggin=true;
             let opjeans=0;
             do{
                 opjeans=parseInt(prompt(`Qué deseas hacer hoy?
@@ -88,11 +93,12 @@ function ingresar(){ //aca se loggea un usuario registrado
                 }
                 
             }while(opjeans!==0);
-
-        }else{
-            alert("EL mail o password son incorrectos")
-    
+            
+            
         }
+        
+    
+        
         
     });
 
