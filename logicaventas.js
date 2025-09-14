@@ -21,16 +21,31 @@ const listaJeans=[
                 {estilo: "cargoB", precio: 60},{estilo:"oversizeA", precio:55}
                 ]
 
+
+//declaramos una coleccion para usuario y compras
+//declaramos a usuario como clase
+
+class Usuario{
+    constructor(nombre, mail, password){
+
+    
+    this.nombre= nombre;
+    this.mail=mail;
+    this.password=password;
+    }
+}
+
 // array para guardar datos de usuarios vacio.
 
-let usuarios=[{nombre:"a", mail:"a", pass:"a"}]; //usuario de ensayo
+let usuarios=[{nombre:"a", mail:"a", password:"a"}]; //usuario de ensayo
 let compras=[];
-//declaramos una coleecion para usuario
 
-let usuario={};
+
 let compra={};
 
 // declarmaos variables para usarlas con las funciones
+//inicio de  numero de facturacion en 1000.
+
 let nfactura=1000;
 
 //FUNCIONES
@@ -42,7 +57,7 @@ function registrarse(){ //aca guardamos los registro de usuarios
     let passwordU=prompt("ingrese su password: ");
 
     //creamos una colleccion de info del usuairo
-    usuario={nombre:nombreU, mail:mailU, pass: passwordU};
+    let usuario= new Usuario(nombreU, mailU, passwordU);
 
     //subimos el usuario al array de usuarios
     usuarios.push(usuario);
@@ -50,25 +65,47 @@ function registrarse(){ //aca guardamos los registro de usuarios
     confirm(`Usted ingresó
              \n nombre: ${usuario.nombre}
             \n email: ${usuario.mail}
-            \n password: ${usuario.pass} `);
+            \n password: ${usuario.password} `);
+
+
+    //verificano valores        
+    console.log(usuarios);
 
 }
+
+
+
+    
+
+
 
 
 function ingresar(){ //aca se loggea un usuario registrado
     
     let mailR=prompt("ingrese su email: ");
     let passwordR=prompt("ingrese su password: ");
+    let loggin=false;
    
-    usuarios.forEach(usuario => {
+        usuarios.forEach(usuario => {
 
-        
             
+            if(mailR===usuario.mail && passwordR==usuario.password){
+
+                alert("usuario logueado correctamente");
+                loggin=true;
+                
+            
+            };
+
+            
+        })    
+        //verificano valores
+        console.log(loggin)
+
                
-        if(mailR===usuario.mail && passwordR==usuario.pass){
+        if(loggin===true){
 
             alert("LOGGIN EXITOSO")
-            loggin=true;
             let opjeans=0;
             do{
                 opjeans=parseInt(prompt(`Qué deseas hacer hoy?
@@ -94,13 +131,13 @@ function ingresar(){ //aca se loggea un usuario registrado
                 
             }while(opjeans!==0);
             
-            
+        }else{
+
+            alert("error en usuario y constraseña")
+
         }
-        
     
-        
-        
-    });
+   
 
 
 }
