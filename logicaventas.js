@@ -15,10 +15,13 @@ SOLO se emite una factura por estilo.
 
 //array con lista de jeans y precios
 
-const listaJeans=[
-                {estilo: "slimA", precio: 40}, {estilo:"cargoA", precio:60},
-                {estilo: "regulaA", precio: 40},{estilo:"slimB", precio:40},
-                {estilo: "cargoB", precio: 60},{estilo:"oversizeA", precio:55}
+let listaJeans=[
+                {id:1001, estilo: "slimA", precio: 40},
+                {id:1002, estilo:"cargoA", precio:60},
+                {id:1003, estilo: "regulaA", precio: 40},
+                {id:1004, estilo:"slimB", precio:40},
+                {id:1005, estilo: "cargoB", precio: 60},
+                {id:1006, estilo:"oversizeA", precio:55}
                 ]
 
 
@@ -38,10 +41,8 @@ class Usuario{
 // array para guardar datos de usuarios vacio.
 
 let usuarios=[{nombre:"a", mail:"a", password:"a"}]; //usuario de ensayo
+let carritoCompra=[];
 let compras=[];
-
-
-let compra={};
 
 // declarmaos variables para usarlas con las funciones
 //inicio de  numero de facturacion en 1000.
@@ -86,19 +87,17 @@ function ingresar(){ //aca se loggea un usuario registrado
     let passwordR=prompt("ingrese su password: ");
     let loggin=false;
    
-        usuarios.forEach(usuario => {
+          //metodo find, recibe por paramentros una funcion para buscar el ususario  
+        const usuarioEncontrado= usuarios.find(usuario =>{
+            return mailR===usuario.mail && passwordR==usuario.password
+        } )
 
+        if(usuarioEncontrado){// si esto es true
+            loggin=true;
+            alert("LOGGIN EXITOSO")
+            let usuarioActivo = usuarioEncontrado; 
+        }
             
-            if(mailR===usuario.mail && passwordR==usuario.password){
-
-                alert("usuario logueado correctamente");
-                loggin=true;
-                
-            
-            };
-
-            
-        })    
         //verificano valores
         console.log(loggin)
 
@@ -143,32 +142,64 @@ function ingresar(){ //aca se loggea un usuario registrado
 }
 
 function comprar(){ //listamos los jeans y compramos
-    
-    //para no reescribri el codigo si se ingresa mas opciones de compra
-    //creamos una variable que nos guarde un string para mostrar por un prompt
+   
+     let totalFactura=0.0;   
+    let mascompra=prompt("Desea comprar un jeans: ? S/N");
 
-    let mostrar="escoge la opcion que necesites: \n";
-    for(let i=0; i<listaJeans.length; i++){
-        mostrar+=`\n ${i}-${listaJeans[i].estilo}--${listaJeans[i].precio} $ `
-    }
-
-     
+    do{ 
        
-        let opventa=0;
-        let cantidad=0;
-        opventa=parseInt(prompt(mostrar));
-        cantidad=parseInt(prompt("cuantas unidades? "));
+       
+        if(mascompra.toLocaleLowerCase() !== "n"){
 
-        let valorjeans= listaJeans[opventa].precio;
-        let valorCompra= valorjeans*cantidad;
+            let mostrar="escoge la opcion que necesites: \n";
 
-        compra={factura:nfactura, jean: listaJeans[opventa].estilo, valorNeto:valorCompra}
-        nfactura++;
+            for(let i=0; i<listaJeans.length; i++){
+                mostrar+=`\n ${i}-${listaJeans[i].estilo}--${listaJeans[i].precio} $ `
+                }
 
-        compras.push(compra)
+            let opventa=0;
+            let cantidad=0;
+            opventa=parseInt(prompt(mostrar));
+            cantidad=parseInt(prompt("cuantas unidades? "));
 
-        console.log(compras)
+            let valorjeans= listaJeans[opventa].precio;
+            let valorCompra= valorjeans*cantidad;
 
+            //creamos un objeto compra 
+
+            let compra={ id:listaJeans[opventa].id,
+                        estilo: listaJeans[opventa].estilo, 
+                        cantidad: cantidad,
+                        valorTotal: valorCompra,
+                        }
+            
+            totalFactura=totalFactura+valorCompra;
+            
+            carritoCompra.push(compra); //subimos la compra al array del carrito
+        }
+         
+        mascompra=prompt("Desea comprar un jeans: ? S/N");
+
+    }while (mascompra.toLowerCase() !== "n" );
+
+       
+
+
+        //luego de terminar el carrito emitimos factura
+
+        let carritoFinal={factura:nfactura, compra: carritoCompra, valorTotal: totalFactura};
+        nfactura++; //incrementamos el valor de la fact
+
+        //guardamos la factura en un array de objets factura
+
+        compras.push(carritoFinal);
+
+        //vaciamos el carrito de compras
+        carritoCompra=[];
+        
+        //para validar
+        console.log(carritoFinal);
+        console.log(compras);
 
 }
 
@@ -182,16 +213,13 @@ function verFacturas(){ //listamos las facturas
         let mostrar="lista de tus compras: \n";
 
         for(let i=0; i<compras.length; i++){
-            mostrar+=`\n factura n: ${compras[i].factura}- estilo: -${compras[i].jean}--valor total: ${compras[i].valorNeto} $ `
+            mostrar+=`\n factura n: ${compras[i].factura }- --valor total: ${compras[i].valorTotal} $ `
         }
         
         alert(mostrar);
     }
 
 }
-
-
-
 
 
 //INICIO DEL PROGRAMA
